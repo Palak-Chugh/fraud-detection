@@ -1,0 +1,13 @@
+Transactions above ₹50,000
+using a new device
+between 12 AM and 4 AM
+should be marked as suspicious
+and reviewed manually.
+
+Repeated failed login attempts
+followed by large transactions
+indicate possible account takeover.
+
+Sudden increase in transaction
+amount greater than 5x
+average spending should be flagged.

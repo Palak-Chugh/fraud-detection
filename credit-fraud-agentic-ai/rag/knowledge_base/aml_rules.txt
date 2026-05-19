@@ -1,0 +1,8 @@
+Anti-money laundering rules:
+
+Multiple high-value transfers
+within a short duration
+may indicate suspicious activity.
+
+Unusual cross-location transactions
+must be flagged.

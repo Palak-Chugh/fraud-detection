@@ -1,0 +1,13 @@
+crewai
+crewai-tools
+openai
+langchain
+langchain-openai
+chromadb
+streamlit
+python-dotenv
+pydantic
+fastapi
+uvicorn
+reportlab
+tiktoken
