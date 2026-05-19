@@ -1,0 +1,8 @@
+Customers with credit score
+below 600 are high risk.
+
+Debt ratio above 0.5
+indicates repayment difficulty.
+
+Stable income reduces
+credit risk.

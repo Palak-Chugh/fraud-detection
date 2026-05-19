@@ -4,53 +4,242 @@ import os
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(ROOT_DIR)
 
-import streamlit as st
-# from crews.test_crew import run_test_crew
+# import streamlit as st
+# # from crews.test_crew import run_test_crew
 
-# st.set_page_config(page_title="Agentic AI POC")
+# # st.set_page_config(page_title="Agentic AI POC")
 
-# st.title("Credit & Fraud Agentic AI")
+# # st.title("Credit & Fraud Agentic AI")
 
-# input_text = st.text_area(
-#     "Enter transaction details"
+# # input_text = st.text_area(
+# #     "Enter transaction details"
+# # )
+
+# # if st.button("Analyze"):
+
+# #     with st.spinner("Analyzing..."):
+# #         result = run_test_crew(input_text)
+
+# #     st.success("Analysis Completed")
+
+# #     st.write(result)
+
+# import streamlit as st
+
+# from crews.fraud_crew import (
+#     analyze_transaction
 # )
 
-# if st.button("Analyze"):
+# st.set_page_config(
+#     page_title="Fraud AI"
+# )
 
-#     with st.spinner("Analyzing..."):
-#         result = run_test_crew(input_text)
+# st.title(
+#     "AI Fraud Detection System"
+# )
 
-#     st.success("Analysis Completed")
+# transaction = st.text_area(
+#     "Enter Transaction Details"
+# )
 
-#     st.write(result)
+# mode = st.selectbox(
+#     "Select Analysis",
+#     [
+#         "Fraud",
+#         "Credit"
+#     ]
+# )
+# if mode == "Credit":
+
+#     result = analyze_credit(
+#         transaction
+#     )
+
+#     st.markdown(result)
 
 
-from crews.fraud_crew import (
-    analyze_transaction
+# if st.button(
+#     "Analyze Fraud"
+# ):
+
+#     with st.spinner(
+#         "Analyzing..."
+#     ):
+
+#         result = (
+#             analyze_transaction(
+#                 transaction
+#             )
+#         )
+
+#     st.subheader(
+#         "Fraud Analysis"
+#     )
+
+#     st.markdown(
+#         result[
+#             "fraud_result"
+#         ]
+#     )
+
+#     st.metric(
+#         "Fraud Score",
+#         result[
+#             "fraud_score"
+#         ]
+#     )
+
+#     if result[
+#         "human_review"
+#     ]:
+
+#         st.error(
+#             "Human Review Required"
+#         )
+
+#         decision = st.radio(
+#             "Decision",
+#             [
+#                 "Approve",
+#                 "Reject",
+#                 "Need More Info"
+#             ]
+#         )
+
+#         comment = st.text_area(
+#             "Reviewer Comment"
+#         )
+
+#         if st.button(
+#             "Submit Review"
+#         ):
+
+#             st.success(
+#                 f"""
+#                 Human Decision:
+#                 {decision}
+#                 """
+#             )
+
+#             st.write(
+#                 comment
+#             )
+
+#     else:
+
+#         st.success(
+#             "Auto Approved"
+#         )
+
+import streamlit as st
+
+from crews.master_crew import (
+    run_full_analysis
 )
 
 st.set_page_config(
-    page_title="Fraud AI POC"
+    page_title="Agentic AI"
 )
 
 st.title(
-    "AI Fraud Detection System"
+    "Credit Risk & Fraud Detection"
 )
 
 transaction = st.text_area(
-    "Enter Transaction Details"
+    "Enter Transaction Data"
 )
 
-if st.button("Analyze Fraud"):
+if st.button(
+    "Analyze"
+):
 
     with st.spinner(
-        "Analyzing Transaction..."
+        "Running Multi-Agent Analysis..."
     ):
 
-        result = analyze_transaction(
-            transaction
+        result = (
+            run_full_analysis(
+                transaction
+            )
         )
 
-    st.success("Completed")
+    st.header(
+        "Fraud Analysis"
+    )
 
-    st.markdown(result)
+    st.markdown(
+        result[
+            "fraud"
+        ]["fraud_result"]
+    )
+
+    st.metric(
+        "Fraud Score",
+        result[
+            "fraud"
+        ]["fraud_score"]
+    )
+
+    st.header(
+        "Credit Analysis"
+    )
+
+    st.markdown(
+        result[
+            "credit"
+        ]
+    )
+
+    st.header(
+        "Audit Report"
+    )
+
+    st.markdown(
+        result[
+            "audit"
+        ]
+    )
+
+    if result[
+        "fraud"
+    ][
+        "human_review"
+    ]:
+
+        st.error(
+            "Human Review Required"
+        )
+
+        decision = st.radio(
+            "Decision",
+            [
+                "Approve",
+                "Reject",
+                "Need More Info"
+            ]
+        )
+
+        comment = st.text_area(
+            "Reviewer Comment"
+        )
+
+        if st.button(
+            "Submit Decision"
+        ):
+
+            st.success(
+                f"""
+                Decision:
+                {decision}
+                """
+            )
+
+            st.write(
+                comment
+            )
+
+    else:
+
+        st.success(
+            "Auto Approved"
+        )

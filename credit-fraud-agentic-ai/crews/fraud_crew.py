@@ -1,3 +1,5 @@
+import json
+import re
 from crewai import Crew, Task
 from agents.fraud_agent import (
     create_fraud_agent
@@ -5,47 +7,87 @@ from agents.fraud_agent import (
 from memory.adaptive_memory import (
     AdaptiveMemory
 )
+from rag.retriever import (
+    FraudRetriever
+)
+
+from human_loop.review_engine import (
+    HumanReviewEngine
+)
+
+def extract_score(text):
+
+    match = re.search(
+        r"Fraud Score.*?([0-9.]+)",
+        text,
+        re.IGNORECASE
+    )
+
+    if match:
+        return float(match.group(1))
+
+    return 0.5
 
 
-def analyze_transaction(transaction):
+def analyze_transaction(
+    transaction
+):
 
     memory = AdaptiveMemory()
 
-    previous_cases = (
+    retriever = FraudRetriever()
+
+    rag_context = (
+        retriever.retrieve(
+            transaction
+        )
+    )
+
+    similar_cases = (
         memory.retrieve_similar_cases(
             transaction
         )
     )
 
-    context = "\n".join(previous_cases)
+    memory_context = (
+        "\n".join(similar_cases)
+        if similar_cases
+        else "No historical cases."
+    )
 
-    agent = create_fraud_agent()
+    agent = (
+        create_fraud_agent()
+    )
 
     task = Task(
         description=f"""
-        Analyze the following transaction
-        for fraud risk.
+        Analyze the transaction.
 
-        Current transaction:
+        Transaction:
         {transaction}
 
-        Similar historical cases:
-        {context}
+        Fraud Policies (RAG):
+        {rag_context}
 
-        Analyze:
+        Similar Historical Cases:
+        {memory_context}
 
-        1. Fraud Score (0-1)
-        2. Risk Level
-        3. Suspicious Signals
-        4. Recommendation
+        You must return:
 
-        Format response cleanly.
+        Fraud Score: number
+        Risk Level:
+        Reasoning:
+        Recommendation:
+
+        Rules:
+        - Score between 0 and 1
+        - Explain WHY
+        - Mention policy triggers
+        - Mention memory relevance
         """,
 
         expected_output="""
-        Fraud report with
-        score, reasoning,
-        recommendation
+        Structured fraud report
         """,
 
         agent=agent
@@ -57,11 +99,31 @@ def analyze_transaction(transaction):
         verbose=True
     )
 
-    result = crew.kickoff()
+    result = str(
+        crew.kickoff()
+    )
+
+    fraud_score = (
+        extract_score(result)
+    )
+
+    human_review = (
+        HumanReviewEngine
+        .needs_review(
+            fraud_score
+        )
+    )
 
     memory.store_case(
         transaction,
-        str(result)
+        result
     )
 
-    return str(result)
+    response = {
+        "fraud_result": result,
+        "fraud_score": fraud_score,
+        "human_review":
+            human_review
+    }
+
+    return response

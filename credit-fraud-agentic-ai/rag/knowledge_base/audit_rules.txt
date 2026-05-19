@@ -1,0 +1,8 @@
+All high-risk transactions
+must include explanation.
+
+Human override decisions
+must be logged.
+
+AI reasoning should
+be transparent and auditable.

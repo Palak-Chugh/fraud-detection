@@ -1,0 +1,8 @@
+Loan default risk increases
+for inconsistent repayment history.
+
+Customers with medium
+loan history require manual review.
+
+High-income customers
+have reduced default probability.
