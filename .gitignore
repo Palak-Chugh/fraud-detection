@@ -1,0 +1,22 @@
+# Virtual env
+venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Secrets
+.env
+
+# Memory
+memory/history.json
+
+# Reports
+reports/*.pdf
+
+# Streamlit cache
+.streamlit/
+
+# IDE
+.vscode/
+.idea/
