@@ -1,24 +1,63 @@
-from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores import FAISS
+# from sentence_transformers import (
+#     SentenceTransformer
+# )
 
-import os
+# from rag.chroma_manager import (
+#     ChromaManager
+# )
 
-embedding_model = OpenAIEmbeddings(
-    api_key=os.getenv("OPENAI_API_KEY")
-)
 
-vector_db = FAISS.load_local(
-    "vector_store",
-    embedding_model,
-    allow_dangerous_deserialization=True
-)
+# EMBEDDING_MODEL = (
+#     SentenceTransformer(
+#         "all-MiniLM-L6-v2"
+#     )
+# )
 
-retriever = vector_db.as_retriever(
-    search_kwargs={"k": 3}
-)
 
-def retrieve_context(query):
+# class FraudRetriever:
 
-    docs = retriever.invoke(query)
+#     def __init__(self):
 
-    return "\n".join([doc.page_content for doc in docs])
+#         self.chroma = (
+#             ChromaManager()
+#         )
+
+#     def retrieve(
+#         self,
+#         query
+#     ):
+
+#         embedding = (
+#             EMBEDDING_MODEL
+#             .encode(query)
+#             .tolist()
+#         )
+
+#         results = (
+#             self.chroma.search(
+#                 embedding
+#             )
+#         )
+
+#         documents = (
+#             results["documents"][0]
+#         )
+
+#         return "\n".join(
+#             documents
+#         )
+class FraudRetriever:
+
+    def retrieve(
+        self,
+        query
+    ):
+
+        return """
+        Transactions above ₹50,000
+        using a new device
+        between 12 AM and 4 AM
+        should be reviewed.
+
+        Trusted devices reduce risk.
+        """

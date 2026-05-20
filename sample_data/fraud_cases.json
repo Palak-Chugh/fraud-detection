@@ -1,0 +1,14 @@
+[
+  {
+    "transaction":
+    "₹95,000 purchase at 2 AM using new device",
+    "risk": "HIGH",
+    "decision": "MANUAL_REVIEW"
+  },
+  {
+    "transaction":
+    "₹500 grocery purchase using trusted device",
+    "risk": "LOW",
+    "decision": "APPROVED"
+  }
+]
